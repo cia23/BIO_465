@@ -95,13 +95,22 @@ def get_corr_coef(df):
     return corr, corr_results
 
 
-file = "Data/50.csv"
+def format_fake_data(df):
+    transposed = df.transpose().copy()
+    drop_labels = transposed.drop(['labels'], axis=0)
+    return transposed, drop_labels
+
+
+file = "Data/100_set1.csv"
 data = pd.read_csv(file, na_values=['-', 'ND'], header=[0])
 
-# use this if you want to drop low variance
-data = drop_low_variance(data)
+transposed_data, no_labels_data = format_fake_data(data)
 
-digits, digit_dict = get_column_digits(data)
+# use this if you want to drop low variance
+high_var_data = drop_low_variance(no_labels_data)
+
+
+digits, digit_dict = get_column_digits(high_var_data)
 
 column_frequencies = get_col_freqs(digit_dict)
 

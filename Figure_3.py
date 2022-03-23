@@ -103,11 +103,13 @@ def format_fake_data(df):
 
 file = "Data/100_set1.csv"
 data = pd.read_csv(file, na_values=['-', 'ND'], header=[0])
+cleaned_data = data
 
-transposed_data, no_labels_data = format_fake_data(data)
+# use this for fake data from the original paper (comment out if not)
+transposed_data, cleaned_data = format_fake_data(data)
 
 # use this if you want to drop low variance
-high_var_data = drop_low_variance(no_labels_data)
+high_var_data = drop_low_variance(cleaned_data)
 
 
 digits, digit_dict = get_column_digits(high_var_data)

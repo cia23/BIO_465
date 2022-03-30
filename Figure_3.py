@@ -104,7 +104,7 @@ def format_fake_data(df):
 def analyze_correlation(input_data, is_path):
     if is_path:
         file = input_data
-        data = pd.read_csv(file, na_values=['-', 'ND'], header=[0])
+        data = pd.read_csv(file, na_values=['-', 'ND', 'Null', 'NA'], header=[0])
     else:
         data = input_data
     cleaned_data = data
@@ -121,20 +121,22 @@ def analyze_correlation(input_data, is_path):
     # df1['Percentage'] = df1['freq'] / sum(df1['freq']) * 100
     column_frequencies = column_frequencies.drop(0)
     transposed = column_frequencies.transpose()[0:].copy()
-    plt.boxplot(transposed, sym="r.", medianprops=dict(color="black"))
-    plt.xticks([1, 2, 3, 4, 5, 6, 7, 8, 9], [1, 2, 3, 4, 5, 6, 7, 8, 9])
-    plt.ylabel("Frequency (percentage)")
-    plt.xlabel("Digit")
-    plt.title("Digit frequency of first number")
-    plt.show()
+    # plt.boxplot(transposed, sym="r.", medianprops=dict(color="black"))
+    # plt.xticks([1, 2, 3, 4, 5, 6, 7, 8, 9], [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    # plt.ylabel("Frequency (percentage)")
+    # plt.xlabel("Digit")
+    # plt.title("Digit frequency of first number")
+    # plt.show()
 
     corr_df, correlations_list = get_corr_coef(column_frequencies)
 
-    plt.hist(correlations_list, 25)
-    plt.show()
+    return correlations_list
+
+    # plt.hist(correlations_list, 25)
+    # plt.show()
 
 
-file = "Data/Collect again/29718670_S8.csv"
+file = "Data/29718670_S8.csv"
 data = pd.read_csv(file, na_values=['-', 'ND'], header=[0])
-data['mean'] = data.mean(axis=1)
+#data['mean'] = data.mean(axis=1)
 analyze_correlation(data, False)

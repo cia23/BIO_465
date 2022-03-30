@@ -12,6 +12,7 @@ To run this project, download and import the following packages:
 *   pandas
 *   numpy
 *   matplotlib
+*   seaborn
 
 ## Running the Data
 To run the scripts, download all the data in this GitHub repository. If the data is in the same directory as the scripts, you will be able to run the scripts and generate

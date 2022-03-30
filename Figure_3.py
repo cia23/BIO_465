@@ -3,8 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
 
-PERCENT_TO_KEEP=.1
-MIN_TO_KEEP=100
+PERCENT_TO_KEEP = .1
+MIN_TO_KEEP = 100
+
 
 #
 def get_frequencies(nums):
@@ -64,7 +65,6 @@ def get_column_digits(df):
 
 
 def get_col_freqs(digits_dict):
-
     col_freq = pd.DataFrame(index=range(0, 10))
     for key in digits_dict.keys():
         frequencies = get_frequencies(digits_dict[key])
@@ -101,33 +101,40 @@ def format_fake_data(df):
     return transposed, drop_labels
 
 
-file = "Data/100_set1.csv"
+def analyze_correlation(input_data, is_path):
+    if is_path:
+        file = input_data
+        data = pd.read_csv(file, na_values=['-', 'ND'], header=[0])
+    else:
+        data = input_data
+    cleaned_data = data
+    # use this for fake data from the original paper (comment out if not)
+    # transposed_data, cleaned_data = format_fake_data(data)
+
+    # use this if you want to drop low variance
+    high_var_data = drop_low_variance(cleaned_data)
+
+    digits, digit_dict = get_column_digits(high_var_data)
+
+    column_frequencies = get_col_freqs(digit_dict)
+
+    # df1['Percentage'] = df1['freq'] / sum(df1['freq']) * 100
+    column_frequencies = column_frequencies.drop(0)
+    transposed = column_frequencies.transpose()[0:].copy()
+    plt.boxplot(transposed, sym="r.", medianprops=dict(color="black"))
+    plt.xticks([1, 2, 3, 4, 5, 6, 7, 8, 9], [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    plt.ylabel("Frequency (percentage)")
+    plt.xlabel("Digit")
+    plt.title("Digit frequency of first number")
+    plt.show()
+
+    corr_df, correlations_list = get_corr_coef(column_frequencies)
+
+    plt.hist(correlations_list, 25)
+    plt.show()
+
+
+file = "Data/Collect again/29718670_S8.csv"
 data = pd.read_csv(file, na_values=['-', 'ND'], header=[0])
-cleaned_data = data
-
-# use this for fake data from the original paper (comment out if not)
-transposed_data, cleaned_data = format_fake_data(data)
-
-# use this if you want to drop low variance
-high_var_data = drop_low_variance(cleaned_data)
-
-
-digits, digit_dict = get_column_digits(high_var_data)
-
-column_frequencies = get_col_freqs(digit_dict)
-
-# df1['Percentage'] = df1['freq'] / sum(df1['freq']) * 100
-column_frequencies = column_frequencies.drop(0)
-transposed = column_frequencies.transpose()[0:].copy()
-plt.boxplot(transposed, sym="r.", medianprops=dict(color="black"))
-plt.xticks([1, 2, 3, 4, 5, 6, 7, 8, 9], [1, 2, 3, 4, 5, 6, 7, 8, 9])
-plt.ylabel("Frequency (percentage)")
-plt.xlabel("Digit")
-plt.title("Digit frequency of first number")
-plt.show()
-
-
-corr_df, correlations_list = get_corr_coef(column_frequencies)
-
-plt.hist(correlations_list, 25)
-plt.show()
+data['mean'] = data.mean(axis=1)
+analyze_correlation(data, False)

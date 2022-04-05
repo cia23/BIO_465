@@ -1,4 +1,6 @@
 from Functions_for_Figure3_Supp1 import *
+from generate_fake_data import *
+from copy import deepcopy
 
 file_name = "Data/34647699.csv"
 plot_top = 80 # ensures all the graphs are scaled the same

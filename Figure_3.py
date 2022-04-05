@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from Functions_for_Figure3_Supp1 import analyze_correlation
 
 # all data files to be analyzed
-files = ['Data/22329341.csv','Data/33242424_TableS1_DEG(Phospho).csv',
+all_files = ['Data/22329341.csv','Data/33242424_TableS1_DEG(Phospho).csv',
          'Data/33242952_TableS1_Dataset2_Parkin_colony.csv','Data/29635916_S2_MaxQuant_log2.csv',
          'Data/32242669_protein_water_normalized.csv','Data/34515489.csv','Data/28217993_DataS12_normalized.csv',
          'Data/35091530_TableS6.csv','Data/33749263.csv','Data/32242669_peptide_water_normalized.csv',
@@ -53,7 +53,7 @@ files = ['Data/22329341.csv','Data/33242424_TableS1_DEG(Phospho).csv',
 all_corr_coef = []
 
 # obtains correlation values for each file and adds to all_corr_coef, an aggregated list
-for file in files:
+for file in all_files:
     correlations = analyze_correlation(file, True, "None", 0, graph=False)
     all_corr_coef += correlations
 

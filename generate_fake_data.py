@@ -1,5 +1,5 @@
-import pandas as pd
 import random
+
 
 def random_data(real_data):
     """

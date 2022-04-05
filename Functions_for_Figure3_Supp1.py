@@ -1,11 +1,7 @@
-from copy import deepcopy
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.mlab as mlab
-import random
-from generate_fake_data import *
+
 
 PERCENT_TO_KEEP = .1
 MIN_TO_KEEP = 100

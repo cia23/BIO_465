@@ -1,142 +1,68 @@
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.mlab as mlab
+from Functions_for_Figure3_Supp1 import analyze_correlation
 
-PERCENT_TO_KEEP = .1
-MIN_TO_KEEP = 100
+# all data files to be analyzed
+files = ['Data/22329341.csv','Data/33242424_TableS1_DEG(Phospho).csv',
+         'Data/33242952_TableS1_Dataset2_Parkin_colony.csv','Data/29635916_S2_MaxQuant_log2.csv',
+         'Data/32242669_protein_water_normalized.csv','Data/34515489.csv','Data/28217993_DataS12_normalized.csv',
+         'Data/35091530_TableS6.csv','Data/33749263.csv','Data/32242669_peptide_water_normalized.csv',
+         'Data/29121770_Supple.Table2.csv','Data/30371095.csv','Data/34677046.csv','Data/32378902_TableS3.csv',
+         'Data/30371095_UnnamedTable_MTS_N-termini_identified.csv','Data/30394099_30K_35%.csv',
+         'Data/33175545_TableS3.csv','Data/34783559_B.csv','Data/29195270_S-7.csv','Data/35091530_TableS5.csv',
+         'Data/34742921.csv','Data/29195270_S-3.csv','Data/32108472_LiCl_sucrose_ProteinGroup.csv','Data/33594990.csv',
+         'Data/32108472_LiCl_sucrose_peptide_output.csv','Data/30394099_30K_100%.csv',
+         'Data/32108472_Trypsin_shaving_peptide_output.csv','Data/24712744_S2_Sheet1.csv','Data/34780180_S2.csv',
+         'Data/30371095_TableS5_STS_dependent_termini.csv','Data/29972301_S6_Protein_Intensities.csv',
+         'Data/26151086_TableS1_All_Quantified_Protein.csv','Data/27535590_TableS-2.csv','Data/32878984_raw.csv',
+         'Data/24712744_S5_replicate2.csv','Data/32181667_TableS1.csv','Data/34783559.csv',
+         'Data/32975419_Table_S21.csv','Data/28102081_Table_S1.csv','Data/33242424_TableS1_DEG(protein).csv',
+         'Data/24712744_S4_replicate3.csv','Data/29718670_S12.csv','Data/35166117_TableS1_imputed.csv',
+         'Data/29718670_S10.csv','Data/32242669_protein_PMSI_raw.csv','Data/27794609_single_digestion.csv',
+         'Data/24677030.csv','Data/32242669_protein_PMSI_normalized.csv','Data/29718670_S8.csv',
+         'Data/33337894_TableS3.csv','Data/32975419_Table_S17.csv',
+         'Data/30371095_TableS3_Proteolysis_in_mitochondrial_pt.csv','Data/30213844.csv',
+         'Data/29634277_S2_intensity.csv','Data/34806897.csv','Data/23672200.csv','Data/35166117_TableS7.csv',
+         'Data/32242669_peptide_PMSI_normalized.csv','Data/33054241.csv','Data/32338516_TableS2_Sheet1.csv',
+         'Data/26080680_table4.csv','Data/32975419_Table_S18.csv','Data/31682457_TableS3a.csv',
+         'Data/32181667_TableS2.csv','Data/31131048.csv','Data/33508502.csv','Data/33453410.csv',
+         'Data/24712744_S5_replicate1.csv','Data/35091530_TableS4.csv','Data/32108472_Trypsin_shaving_ProteinGroup.csv',
+         'Data/30767541_S3_Metaproteomics_cecum_content.csv','Data/29718670_S14.csv','Data/25728785_N-end_rule_TMT.csv',
+         'Data/34673282.csv','Data/31859514_S1.csv','Data/35091530_TableS2.csv','Data/24712744_S5_replicate3.csv',
+         'Data/32543193_TableS3.csv','Data/30767541_S3_Metaproteomics_colon_content.csv',
+         'Data/26080680_table6_sheet2.csv','Data/29250956_Table_S2.csv','Data/30394099_60K_25%.csv',
+         'Data/35091530_TableS3.csv','Data/32519869_TableS1_Whole_Tissue_Proteome_Matrix.csv',
+         'Data/35166117_TableS5_raw.csv','Data/28217993_DataS12_raw.csv','Data/29718670_S9.csv',
+         'Data/29250956_Table_S1.csv','Data/29634277_S2_LFQ.csv','Data/35089061.csv','Data/35085786_Proteins.csv',
+         'Data/32878984_normalized.csv','Data/32975419_Table_S19.csv','Data/34647699.csv','Data/32975419_Table_S16.csv',
+         'Data/27794609_double_digestion.csv','Data/32108472_ECF_peptide_output.csv',
+         'Data/30371095_TableS4_BAM7_dependent_termini.csv','Data/33175545_TableS2.csv','Data/30239205.csv',
+         'Data/29718670_S7.csv','Data/30394099_30K_75%.csv','Data/32242669_protein_water_raw.csv',
+         'Data/30371095_TableS2_TAILSMT_BAM7vsSTSvsDMSO.csv','Data/30767541_S3_Metaproteomics_colon_mucus.csv',
+         'Data/30814501.csv','Data/34874173_Table_S3.csv','Data/32108472_ECF_ProteinGroup.csv',
+         'Data/35166117_TableS1_raw.csv','Data/32242669_peptide_water_raw.csv','Data/27025989_S1_raw.csv',
+         'Data/35166117_TableS3_raw.csv','Data/34874173_Table_S1.csv','Data/33515806_Table3.csv',
+         'Data/29718670_S11.csv','Data/30394099_30K_25%.csv','Data/35166117_TableS3_imputed.csv',
+         'Data/35166117_TableS5_imputed.csv','Data/35093608_Table_S5.csv','Data/24712744_S4_replicate2.csv',
+         'Data/26080680_table2.csv','Data/30394099_30K_50%.csv','Data/29367434.csv','Data/34780180_S1.csv',
+         'Data/26080680_table6_sheet1.csv','Data/26080680_table7.csv','Data/24712744_S4_replicate1.csv',
+         'Data/29195270_S-9.csv','Data/32242669_peptide_PMSI_raw.csv','Data/33515806_Table4.csv',
+         'Data/29195270_S-1.csv','Data/30371095_TableS1_TAILSMT_data.csv','Data/33242424_TableS1_DEG(RNA).csv',
+         'Data/29250956_Table_S4.csv','Data/29196338.csv','Data/34855411_Proteins.csv','Data/32975419_Table_S20.csv',
+         'Data/31682457_TableS4a.csv','Data/34919406.csv']
 
+all_corr_coef = []
 
-#
-def get_frequencies(nums):
-    freqs_list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    for num in nums:
-        if not pd.isna(num):
-            freqs_list[num] += 1
-    freqs_df = pd.DataFrame(freqs_list, index=range(0, 10), columns=['freq'])
+# obtains correlation values for each file and adds to all_corr_coef, an aggregated list
+for file in files:
+    correlations = analyze_correlation(file, True, "None", 0, graph=False)
+    all_corr_coef += correlations
 
-    return freqs_df
+# sort, plot, and save plot of aggregated correlation coefficients
+all_corr_coef.sort()
+plt.hist(all_corr_coef, 50)
+plt.title("Aggregated column-column correlation coefficients across all datasets")
+plt.xlabel("Correlation coefficient")
+plt.ylabel("Frequency")
+plt.savefig("Figure_3")
+plt.show()
 
-
-# returns the first digit after the decimal point
-def first_after_decimal(num):
-    # if (abs(num) < 1):
-    #     return int((abs(num) * 10) % 10)
-    if pd.isna(num):
-        return
-    return int((abs(float(num)) * 10) % 10)
-
-
-def first_digit(num):
-    if pd.isna(num):
-        return
-    if float(num) == 0:
-        return
-    num = num * 100000
-    return int(str(abs(num))[0])
-
-
-# drop columns with low variance and return dataframe
-def drop_low_variance(df):
-    df_variance = df.copy(deep=True)
-    variance = df_variance.var(axis=1)
-    df_variance['variance'] = variance
-    df_variance.sort_values(by='variance', ascending=False, inplace=True)
-    drop = int(len(df_variance) * PERCENT_TO_KEEP)
-    drop = drop if drop > MIN_TO_KEEP else MIN_TO_KEEP
-    dropped_df = df_variance.drop(df_variance.index[drop:])
-    return dropped_df.drop(['variance'], axis=1)
-
-
-# get specified digit for each column and makes a dictionary with key as col_name, and value a list of digits
-# for the column
-def get_column_digits(df):
-    _digits = []  #
-    _digit_dict = {}
-
-    for column in df:
-        nums = df[column]
-        # last_digit = [first_after_decimal(num) for num in nums]
-        digit = [first_digit(num) for num in nums]
-        _digits += digit
-        _digit_dict[column] = digit
-
-    return _digits, _digit_dict
-
-
-def get_col_freqs(digits_dict):
-    col_freq = pd.DataFrame(index=range(0, 10))
-    for key in digits_dict.keys():
-        frequencies = get_frequencies(digits_dict[key])
-        frequencies['Percentage'] = frequencies['freq'] / sum(frequencies['freq']) * 100
-        col_freq[key] = frequencies['Percentage']
-        message = (f"{key}"
-                   f"{frequencies}"
-                   f"")
-        print(message)
-
-    return col_freq
-
-
-def get_corr_coef(df):
-    num_cols = len(df.columns)
-    col_names = df.columns
-    corr = pd.DataFrame(index=df.columns, columns=df.columns)
-    corr_results = []
-    for i in range(num_cols):
-        for j in range(num_cols):
-            if j <= i:
-                continue
-            else:
-                coef = np.corrcoef(df[col_names[i]], df[col_names[j]])[0, 1]
-                corr.iat[i, j] = coef
-                corr_results.append(coef)
-
-    return corr, corr_results
-
-
-def format_fake_data(df):
-    transposed = df.transpose().copy()
-    drop_labels = transposed.drop(['labels'], axis=0)
-    return transposed, drop_labels
-
-
-def analyze_correlation(input_data, is_path):
-    if is_path:
-        file = input_data
-        data = pd.read_csv(file, na_values=['-', 'ND', 'Null', 'NA'], header=[0])
-    else:
-        data = input_data
-    cleaned_data = data
-    # use this for fake data from the original paper (comment out if not)
-    # transposed_data, cleaned_data = format_fake_data(data)
-
-    # use this if you want to drop low variance
-    high_var_data = drop_low_variance(cleaned_data)
-
-    digits, digit_dict = get_column_digits(high_var_data)
-
-    column_frequencies = get_col_freqs(digit_dict)
-
-    # df1['Percentage'] = df1['freq'] / sum(df1['freq']) * 100
-    column_frequencies = column_frequencies.drop(0)
-    transposed = column_frequencies.transpose()[0:].copy()
-    # plt.boxplot(transposed, sym="r.", medianprops=dict(color="black"))
-    # plt.xticks([1, 2, 3, 4, 5, 6, 7, 8, 9], [1, 2, 3, 4, 5, 6, 7, 8, 9])
-    # plt.ylabel("Frequency (percentage)")
-    # plt.xlabel("Digit")
-    # plt.title("Digit frequency of first number")
-    # plt.show()
-
-    corr_df, correlations_list = get_corr_coef(column_frequencies)
-
-    return correlations_list
-
-    # plt.hist(correlations_list, 25)
-    # plt.show()
-
-
-file = "Data/29718670_S8.csv"
-data = pd.read_csv(file, na_values=['-', 'ND'], header=[0])
-#data['mean'] = data.mean(axis=1)
-analyze_correlation(data, False)

@@ -13,7 +13,20 @@ To run this project, download and import the following packages:
 *   numpy
 *   matplotlib
 *   seaborn
+*   random
+*   copy
 
 ## Running the Data
-To run the scripts, download all the data in this GitHub repository. If the data is in the same directory as the scripts, you will be able to run the scripts and generate
-results. Other numeric datasets can be used if put in the Data folder. Input the name and path to the dataset of interest in the all_files variable and run the script.
+To run the scripts, download all the data in this GitHub repository. If the data is in the same directory as the scripts, you will be able to run the scripts and generate results. Other numeric datasets can be used if put in the Data folder. Input the name and path to the dataset of interest in the all_files variable and run the script. All figures generated in the scripts will be saved to a folder labeled 'Figures'
+
+### Figure 1
+Figure 1 can be created using the Make_Figure1 file. This figure analyzes and plots digit frequencies for all the files in the study. It will take 1-2 minutes to run and will output a boxplot.
+
+### Figure 2
+Figure 2 can be created using the Make_Figure2 file. This figure analyzes and plots the digit frequencies from a paper known to have fraudulent data. It will take <30 seconds to run and will output a scatter plot.
+
+### Figure 3
+Figure 3 can be created using the Make_Figure3 file. This figure analyzes and plots the correlations between the columns of all files. It will take 1-2 minutes to run and will output a histogram of correlation data. Figure 3 uses functions in the Helper_Functions file. 
+
+### Figure 4
+Figure 4 can be created using the Make_Figure4 file. This figure analyzes different ways data can be fabricated and plots the correlations between the columns of real and fake data. This is only done for 1 dataset, but can be done for any dataset. It will take <30 seconds to run and will output 5 histograms of correlation data. Figure 4 uses functions in teh Helper_Functions and Create_Fake_Data files.

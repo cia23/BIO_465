@@ -28,5 +28,5 @@ Figure 2 can be created using the Make_Figure2 file. This figure analyzes and pl
 ### Figure 3
 Figure 3 can be created using the Make_Figure3 file. This figure analyzes and plots the correlations between the columns of all files. It will take 1-2 minutes to run and will output a histogram of correlation data. Figure 3 uses functions in the Helper_Functions file. 
 
-### Figure 4
-Figure 4 can be created using the Make_Figure4 file. This figure analyzes different ways data can be fabricated and plots the correlations between the columns of real and fake data. This is only done for 1 dataset, but can be done for any dataset in the Data folder. It will take <30 seconds to run and will output 5 histograms of correlation data. Figure 4 uses functions in the Helper_Functions and Create_Fake_Data files.
+### Supplemental Figure 1
+Supplemental Figure 1 can be created using the Make_Supp_Figure1 file. This figure analyzes different ways data can be fabricated and plots the correlations between the columns of real and fake data. This is only done for 1 dataset, but can be done for any dataset in the Data folder. It will take <30 seconds to run and will output 5 histograms of correlation data. This figure uses functions in the Helper_Functions and Create_Fake_Data files.
